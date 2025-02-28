@@ -4,7 +4,6 @@ from __future__ import annotations
 from pioreactor.automations import events
 from pioreactor.automations.dosing.base import DosingAutomationJobContrib
 from pioreactor.exc import CalibrationError
-from pioreactor.utils import local_persistant_storage
 
 
 class ChemostatWithConstantAltMediaFraction(DosingAutomationJobContrib):
@@ -20,14 +19,6 @@ class ChemostatWithConstantAltMediaFraction(DosingAutomationJobContrib):
 
     def __init__(self, volume: float | str, target_fraction: float | str, **kwargs) -> None:
         super().__init__(**kwargs)
-
-        with local_persistant_storage("current_pump_calibration") as cache:
-            if "media" not in cache:
-                raise CalibrationError("Media pump calibration must be performed first.")
-            elif "waste" not in cache:
-                raise CalibrationError("Waste pump calibration must be performed first.")
-            elif "alt_media" not in cache:
-                raise CalibrationError("Alt-media pump calibration must be performed first.")
 
         self.volume = float(volume)
         self.target_fraction = float(target_fraction)
