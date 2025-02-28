@@ -4,7 +4,6 @@ from __future__ import annotations
 from pioreactor.automations import events
 from pioreactor.automations.dosing.base import DosingAutomationJobContrib
 from pioreactor.exc import CalibrationError
-from pioreactor.utils import local_persistant_storage
 
 
 class Morbidostat(DosingAutomationJobContrib):
@@ -22,14 +21,6 @@ class Morbidostat(DosingAutomationJobContrib):
 
     def __init__(self, target_normalized_od: float | str, volume: float | str, **kwargs):
         super(Morbidostat, self).__init__(**kwargs)
-
-        with local_persistant_storage("current_pump_calibration") as cache:
-            if "media" not in cache:
-                raise CalibrationError("Media pump calibration must be performed first.")
-            elif "waste" not in cache:
-                raise CalibrationError("Waste pump calibration must be performed first.")
-            elif "alt_media" not in cache:
-                raise CalibrationError("Alt media pump calibration must be performed first.")
 
         self.target_normalized_od = float(target_normalized_od)
         self.volume = float(volume)
