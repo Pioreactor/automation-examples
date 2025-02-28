@@ -6,7 +6,6 @@ from typing import Optional
 from pioreactor.automations import events
 from pioreactor.automations.dosing.base import DosingAutomationJobContrib
 from pioreactor.exc import CalibrationError
-from pioreactor.utils import local_persistant_storage
 
 
 class SwitchingDosing(DosingAutomationJobContrib):
@@ -22,14 +21,6 @@ class SwitchingDosing(DosingAutomationJobContrib):
 
     def __init__(self, target_od: float | str,  **kwargs) -> None:
         super().__init__(**kwargs)
-
-        with local_persistant_storage("current_pump_calibration") as cache:
-            if "media" not in cache:
-                raise CalibrationError("Media pump calibration must be performed first.")
-            elif "waste" not in cache:
-                raise CalibrationError("Waste pump calibration must be performed first.")
-            elif "alt_media" not in cache:
-                raise CalibrationError("alt_media pump calibration must be performed first.")
 
 
         self.target_od = float(target_od)
