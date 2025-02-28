@@ -48,17 +48,3 @@ class LightCycle(LEDAutomationJobContrib):
             self.set_led_intensity(channel, new_intensity)
         return events.ChangedLedIntensity(f"Changed intensity to {new_intensity:0.2f}%")
 
-
-if __name__ == "__main__":
-    from pioreactor.background_jobs.led_control import LEDController
-    from pioreactor.whoami import get_unit_name, get_latest_experiment_name
-
-    lc = LEDController(
-        led_automation="light_cycle",
-        max_light_intensity=2.0,
-        duration=0.03,  # every Xmin we "wake up" and decide what to do.
-        unit=get_unit_name(),
-        experiment=get_latest_experiment_name(),
-    )
-
-    lc.block_until_disconnected()
